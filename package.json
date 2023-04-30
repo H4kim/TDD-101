@@ -1,0 +1,15 @@
+{
+   "name": "tdd-101",
+   "version": "1.0.0",
+   "description": "Following the book Learn Test-Driven-Development by Saleem Siddiqui",
+   "main": "index.js",
+   "scripts": {
+      "test": "NODE_OPTIONS=--experimental-vm-modules npx jest"
+   },
+   "keywords": [],
+   "author": "",
+   "license": "ISC",
+   "dependencies": {
+      "jest": "^29.5.0"
+   }
+}
