@@ -20,3 +20,12 @@ test("portfolio addition", () => {
 
    expect(portfolio.evaluate("USD")).toEqual(fifteenDollars);
 });
+
+test("euro and usd addition", () => {
+   const tenDollars = new Money(5, "USD");
+   const fiveDollars = new Money(10, "EUR");
+   const portfolio = new Portfolio();
+   portfolio.add(tenDollars, fiveDollars);
+
+   expect(portfolio.evaluate("USD")).toEqual(new Money(17, "USD"));
+});
