@@ -22,10 +22,15 @@ test("portfolio addition", () => {
 });
 
 test("euro and usd addition", () => {
-   const tenDollars = new Money(5, "USD");
-   const fiveDollars = new Money(10, "EUR");
    const portfolio = new Portfolio();
-   portfolio.add(tenDollars, fiveDollars);
+   portfolio.add(new Money(5, "USD"), new Money(10, "EUR"));
 
    expect(portfolio.evaluate("USD")).toEqual(new Money(17, "USD"));
+});
+
+test("dollar and won addition", () => {
+   const portfolio = new Portfolio();
+   portfolio.add(new Money(1, "USD"), new Money(1100, "KRW"));
+
+   expect(portfolio.evaluate("KRW")).toEqual(new Money(2200, "KRW"));
 });
