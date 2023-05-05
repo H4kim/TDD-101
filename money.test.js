@@ -34,3 +34,18 @@ test("dollar and won addition", () => {
 
    expect(portfolio.evaluate("KRW")).toEqual(new Money(2200, "KRW"));
 });
+
+test("missing exchanges rates", () => {
+   const oneDollar = new Money(1, "USD");
+   const oneEuro = new Money(1, "EUR");
+   const oneWon = new Money(1, "KRW");
+   const portfolio = new Portfolio();
+   portfolio.add(oneDollar, oneEuro, oneWon);
+
+   function evaluateWithError() {
+      portfolio.evaluate("Kalganid");
+   }
+   expect(evaluateWithError).toThrow(
+      new Error("Missing exchange rate(s): [USD->Kalganid,EUR->Kalganid,KRW->Kalganid]")
+   );
+});
