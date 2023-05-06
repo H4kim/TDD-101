@@ -1,5 +1,10 @@
+const Bank = require("./bank");
 const { Money } = require("./money");
 const Portfolio = require("./portfolio");
+
+const bank = new Bank();
+bank.addExchangeRate("EUR", "USD", 1.2);
+bank.addExchangeRate("USD", "KRW", 1100);
 
 test("test multiplication", () => {
    const money = new Money(5, "USD");
@@ -18,21 +23,22 @@ test("portfolio addition", () => {
    const portfolio = new Portfolio();
    portfolio.add(tenDollars, fiveDollars);
 
-   expect(portfolio.evaluate("USD")).toEqual(fifteenDollars);
+   expect(portfolio.evaluate(bank, "USD")).toEqual(fifteenDollars);
 });
 
 test("euro and usd addition", () => {
    const portfolio = new Portfolio();
    portfolio.add(new Money(5, "USD"), new Money(10, "EUR"));
 
-   expect(portfolio.evaluate("USD")).toEqual(new Money(17, "USD"));
+   expect(portfolio.evaluate(bank, "USD")).toEqual(new Money(17, "USD"));
 });
 
 test("dollar and won addition", () => {
    const portfolio = new Portfolio();
+
    portfolio.add(new Money(1, "USD"), new Money(1100, "KRW"));
 
-   expect(portfolio.evaluate("KRW")).toEqual(new Money(2200, "KRW"));
+   expect(portfolio.evaluate(bank, "KRW")).toEqual(new Money(2200, "KRW"));
 });
 
 test("missing exchanges rates", () => {
@@ -40,12 +46,24 @@ test("missing exchanges rates", () => {
    const oneEuro = new Money(1, "EUR");
    const oneWon = new Money(1, "KRW");
    const portfolio = new Portfolio();
-   portfolio.add(oneDollar, oneEuro, oneWon);
 
+   portfolio.add(oneDollar, oneEuro, oneWon);
    function evaluateWithError() {
-      portfolio.evaluate("Kalganid");
+      portfolio.evaluate(bank, "Kalganid");
    }
    expect(evaluateWithError).toThrow(
       new Error("Missing exchange rate(s): [USD->Kalganid,EUR->Kalganid,KRW->Kalganid]")
    );
+});
+
+test("money conversion", () => {
+   expect(bank.convert(new Money(10, "EUR"), "USD")).toEqual(new Money(12, "USD"));
+});
+
+test("missing echanges rate from the bank", () => {
+   function convertWithError() {
+      bank.convert(new Money(10, "EUR"), "Kalganid");
+   }
+
+   expect(convertWithError).toThrow(new Error("EUR->Kalganid"));
 });
