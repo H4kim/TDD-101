@@ -2,9 +2,12 @@ const Bank = require("./bank");
 const { Money } = require("./money");
 const Portfolio = require("./portfolio");
 
-const bank = new Bank();
-bank.addExchangeRate("EUR", "USD", 1.2);
-bank.addExchangeRate("USD", "KRW", 1100);
+let bank;
+beforeEach(() => {
+   bank = new Bank();
+   bank.addExchangeRate("EUR", "USD", 1.2);
+   bank.addExchangeRate("USD", "KRW", 1100);
+});
 
 test("test multiplication", () => {
    const money = new Money(5, "USD");
@@ -57,7 +60,11 @@ test("missing exchanges rates", () => {
 });
 
 test("money conversion", () => {
-   expect(bank.convert(new Money(10, "EUR"), "USD")).toEqual(new Money(12, "USD"));
+   const tenEuros = new Money(10, "EUR");
+   expect(bank.convert(tenEuros, "USD")).toEqual(new Money(12, "USD"));
+
+   bank.addExchangeRate("EUR", "USD", 1.3);
+   expect(bank.convert(tenEuros, "USD")).toEqual(new Money(13, "USD"));
 });
 
 test("missing echanges rate from the bank", () => {

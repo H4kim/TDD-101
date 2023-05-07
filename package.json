@@ -4,7 +4,7 @@
    "description": "Following the book Learn Test-Driven-Development by Saleem Siddiqui",
    "main": "index.js",
    "scripts": {
-      "test": "NODE_OPTIONS=--experimental-vm-modules npx jest"
+      "test": "npx jest --randomize"
    },
    "keywords": [],
    "author": "",
