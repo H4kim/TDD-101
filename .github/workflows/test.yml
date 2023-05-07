@@ -1,0 +1,21 @@
+name: test
+on:
+   push:
+      branches: [main]
+jobs:
+   test:
+      name: test
+      strategy:
+         matrix:
+            node-versions: [18.x, 16.x]
+            platforms: [ubuntu-latest, macos-latest, windows-latest]
+      runs-on: ${{matrix.platforms}}
+
+      steps:
+         - name: Setup Nodejs ${{ matrix.node-versions }}
+           uses: actions/setup-node@v2
+         - name: checkout repo
+           uses: actions/checkout@v2
+         - name: test
+           run: npm run test
+           shell: bash
